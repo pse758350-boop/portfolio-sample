@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>레트로 데스크톱 와이어프레임</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "MS Sans Serif", sans-serif;
+        font-size: 11px;
+        background-image: url("window.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: #008080;
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* 데스크톱 아이콘 영역 */
+      .desktop-icons {
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        right: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        z-index: 1;
+      }
+
+      .icon-image img {
+        width: 100%;
+        height: 100%;
+        background: none;
+        filter: drop-shadow(0 0 0 transparent);
+      }
+
+      .desktop-icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 70px;
+        padding: 5px;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: background-color 0.2s;
+      }
+
+      .desktop-icon:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .desktop-icon.selected {
+        background-color: rgba(0, 0, 139, 0.6);
+      }
+
+      .icon-image {
+        width: 50px;
+        height: 50px;
+        /* background: #db94d8; */
+        /* border: 2px inset #c0c0c0; */
+        margin-bottom: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+      }
+
+      .icon-label {
+        color: white;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+        font-size: 14px;
+        text-align: center;
+        line-height: 12px;
+        max-width: 65px;
+        word-wrap: break-word;
+      }
+
+      /* 윈도우 창 스타일 */
+      .window {
+        position: absolute;
+        background: #c0c0c0;
+        border: 2px outset #c0c0c0;
+        min-width: 300px;
+        min-height: 200px;
+        z-index: 100;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        display: none;
+      }
+
+      .window.active {
+        display: block;
+      }
+
+      .window-header {
+        background: linear-gradient(90deg, #e386ff 0%, #872ba3 100%);
+        color: white;
+        padding: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: move;
+        height: 18px;
+        font-size: 11px;
+        font-weight: bold;
+      }
+
+      .window-title {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding-left: 3px;
+      }
+
+      .window-controls {
+        display: flex;
+        gap: 2px;
+      }
+
+      .window-button {
+        width: 16px;
+        height: 14px;
+        background: #c0c0c0;
+        border: 1px outset #c0c0c0;
+        font-size: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "MS Sans Serif", sans-serif;
+      }
+
+      .window-button:active {
+        border: 1px inset #c0c0c0;
+      }
+
+      .window-content {
+        padding: 10px;
+        background: white;
+        height: calc(100% - 18px);
+        overflow: auto;
+        font-size: 11px;
+        line-height: 1.4;
+      }
+
+      /* 개별 윈도우 크기 */
+      .window-alicja {
+        width: 350px;
+        height: 280px;
+        top: 100px;
+        left: 100px;
+      }
+      .window-projects {
+        width: 400px;
+        height: 300px;
+        top: 80px;
+        left: 200px;
+      }
+      .window-margo {
+        width: 380px;
+        height: 500px;
+        top: 60px;
+        left: 200px;
+      }
+      .window-music {
+        width: 400px;
+        height: 500px;
+        top: 130px;
+        left: 170px;
+      }
+
+      /* 작업표시줄 */
+      .taskbar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 35px;
+        background: #d792da;
+        border-top: 2px solid #ffffff;
+        display: flex;
+        align-items: center;
+        padding: 0 2px;
+        z-index: 1000;
+      }
+
+      .start-button {
+        height: 26px;
+        background: #e5ade7;
+        border: 2px outset #c0c0c0;
+        padding: 0 15px;
+        font-size: 11px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .start-button:active {
+        border: 2px inset #c0c0c0;
+      }
+
+      .start-icon {
+        width: 16px;
+        height: 16px;
+        background: #ff00ddc9;
+        border-radius: 2px;
+      }
+
+      .taskbar-right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .system-tray {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .tray-icon {
+        width: 16px;
+        height: 16px;
+        background: #808080;
+        border: 1px solid #404040;
+      }
+
+      .clock {
+        font-size: 11px;
+        color: #000;
+        padding: 2px 5px;
+        border: 1px inset #c0c0c0;
+        background: #c0c0c0;
+      }
+
+      /* 와이어프레임 주석 */
+      .wireframe-note {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #ccc;
+        padding: 5px 8px;
+        font-size: 10px;
+        color: #666;
+        border-radius: 3px;
+        pointer-events: none;
+      }
+
+      .note-1 {
+        top: 120px;
+        right: 20px;
+      }
+      .note-2 {
+        bottom: 50px;
+        left: 20px;
+      }
+      .note-3 {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      /* 데스크톱 배경 텍스처 */
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.1;
+        background-image: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 2px,
+          rgba(255, 255, 255, 0.1) 2px,
+          rgba(255, 255, 255, 0.1) 4px
+        );
+      }
+      /* 픽셀 필터 오버레이 */
+      body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.3) 2px,
+          rgba(0, 0, 0, 0.1) 3px
+        );
+        pointer-events: none;
+        z-index: 10000;
+        mix-blend-mode: multiply;
+      }
+
+      /* 윈도우 콘텐츠 스타일 */
+      .profile-section {
+        margin-bottom: 15px;
+      }
+
+      .profile-section h3 {
+        color: #000080;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 3px;
+      }
+
+      .project-item {
+        background: #f0f0f0;
+        padding: 8px;
+        margin-bottom: 8px;
+        border: 1px inset #c0c0c0;
+      }
+
+      .book-image {
+        width: 120px;
+        height: 160px;
+        background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+        border: 2px solid #333;
+        margin: 0 auto 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 데스크톱 아이콘들 -->
+    <div class="desktop-icons">
+      <div class="desktop-icon" onclick="openWindow('Recycle Bin')">
+        <div class="icon-image">
+          <img src="Untitled-1.png" alt="Recycle Bin" />
+        </div>
+        <div class="icon-label">Recycle Bin</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('Contact')">
+        <div class="icon-image">
+          <img src="Untitled-2.png" alt="Contact" />
+        </div>
+        <div class="icon-label">Contact</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('Profile')">
+        <div class="icon-image">
+          <img src="Untitled-3.png" alt="Profile" />
+        </div>
+        <div class="icon-label">Profile</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('email')">
+        <div class="icon-image">
+          <img src="Untitled-4.png" alt="E-mail" />
+        </div>
+        <div class="icon-label">E-mail</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('Music')">
+        <div class="icon-image">
+          <img src="Untitled-5.png" alt="Music" />
+        </div>
+        <div class="icon-label">Music</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('Resume')">
+        <div class="icon-image">
+          <img src="Untitled-6.png" alt="Resume" />
+        </div>
+        <div class="icon-label">Resume</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('margo')">
+        <div class="icon-image">
+          <img src="Untitled-4.png" alt="Margo" />
+        </div>
+        <div class="icon-label">Margo</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('music')">
+        <div class="icon-image">
+          <img src="Untitled-4.png" alt="Music" />
+        </div>
+        <div class="icon-label">Music</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('solitaire')">
+        <div class="icon-image">
+          <img src="Untitled-4.png" alt="Solitaire" />
+        </div>
+        <div class="icon-label">Solitaire</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('paint')">
+        <div class="icon-image">
+          <img src="Untitled-4.png" alt="Paint" />
+        </div>
+        <div class="icon-label">Paint</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('chat')">
+        <div class="icon-image">
+          <img src="Untitled-3.png" alt="Chat" />
+        </div>
+        <div class="icon-label">Chat</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('guest')">
+        <div class="icon-image">
+          <img src="Untitled-4.png" alt="Guest" />
+        </div>
+        <div class="icon-label">Guest</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('radio')">
+        <div class="icon-image">
+          <img src="Untitled-4.png" alt="Radio" />
+        </div>
+        <div class="icon-label">Radio</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('awards')">
+        <div class="icon-image">
+          <img src="Untitled-4.png" alt="Awards" />
+        </div>
+        <div class="icon-label">Awards</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('recycling')">
+        <div class="icon-image">
+          <img src="Untitled-4.png" alt="Recycling" />
+        </div>
+        <div class="icon-label">Recycling</div>
+      </div>
+    </div>
+    <!-- 윈도우 창들 -->
+    <!-- Alicja 프로필 창 -->
+    <div class="window window-Recycle Bin" id="window-Recycle Bin">
+      <div class="window-header">
+        <div class="window-title">
+          <span>👤</span>
+          <span>Alicja - Profile</span>
+        </div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('Recycle Bin')">
+            ×
+          </div>
+        </div>
+      </div>
+      <div class="window-content">
+        <div class="profile-section">
+          <h3>About Me</h3>
+          <p><strong>Name:</strong> Alicja</p>
+          <p><strong>Role:</strong> Creative Developer & Designer</p>
+          <p><strong>Location:</strong> Seoul, Korea</p>
+          <p>
+            <strong>Interests:</strong> UI/UX Design, Web Development, Digital
+            Art
+          </p>
+        </div>
+        <div class="profile-section">
+          <h3>Skills</h3>
+          <p>• Frontend Development (HTML, CSS, JavaScript)</p>
+          <p>• UI/UX Design</p>
+          <p>• Digital Illustration</p>
+          <p>• Project Management</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects 창 -->
+    <div class="window window-Contact" id="window-Contact">
+      <div class="window-header">
+        <div class="window-title">
+          <span>📁</span>
+          <span>Contact</span>
+        </div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('Contact')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <div class="project-item">
+          <h4>🎨 Retro Desktop Interface</h4>
+          <p>
+            A nostalgic Windows 95-style desktop interface with modern
+            functionality.
+          </p>
+          <small>Technologies: HTML, CSS, JavaScript</small>
+        </div>
+        <div class="project-item">
+          <h4>📚 Margo Coloring Books</h4>
+          <p>Creative coloring book designs and digital illustrations.</p>
+          <small>Tools: Digital Art, Print Design</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Margo Coloring Books 창 -->
+    <div class="window window-margo" id="window-margo">
+      <div class="window-header">
+        <div class="window-title">
+          <span>🥭</span>
+          <span>Margo Bloom Coloring Books</span>
+        </div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('margo')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <div style="text-align: center; margin-bottom: 15px">
+          <div class="book-image">
+            🍔🍕🧁<br />
+            Food & Snacks<br />
+            Coloring Book
+          </div>
+          <h3>Food & Snacks: Cute and Simple Food Coloring Book</h3>
+          <p><strong>by Margo Bloom</strong></p>
+          <p>⭐⭐⭐⭐⭐ 1 review</p>
+        </div>
+
+        <div class="profile-section">
+          <h4>What's Inside</h4>
+          <p>• 52 Food-Themed Pages — snacks, sweets, drinks</p>
+          <p>• Bold, Easy Outlines — markers, crayons, gel pens</p>
+          <p>• Single-Sided Printing — put a blank sheet behind</p>
+          <p>• 8.5" x 8.5" Square — cozy, bag-friendly</p>
+        </div>
+
+        <div
+          style="
+            background: #ff9500;
+            color: white;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+          "
+        >
+          📚 View on Amazon
+        </div>
+      </div>
+    </div>
+
+    <!-- 나머지 윈도우들 -->
+    <!-- <div
+      class="window"
+      id="window-music"
+      style="width: 350px; height: 300px; top: 130px; left: 170px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>🎵</span><span>Music Player</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('music')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <video width="100%" height="315" autoplay>
+          <source
+            src="Avril Lavigne - Complicated (Official Video).mp4"
+            type="video/mp4"
+          />
+          브라우저가 비디오를 지원하지 않습니다.
+        </video>
+        <h3>🎵 Now Playing</h3>
+        <div class="project-item" style="text-align: center">
+          <h4>Lo-Fi Coding Beats</h4>
+          <p>Perfect background music for creative work</p>
+        </div>
+      </div>
+    </div> -->
+
+    <div
+      class="window"
+      id="window-Profile"
+      style="width: 350px; height: 250px; top: 120px; left: 150px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>💼</span><span>Profile</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('Profile')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <h3>Professional Network</h3>
+        <p>Connect with me on LinkedIn for professional updates!</p>
+      </div>
+    </div>
+
+    <div
+      class="window"
+      id="window-email"
+      style="width: 400px; height: 300px; top: 90px; left: 250px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>📧</span><span>E-mail</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('email')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <h3>📥 Inbox (3)</h3>
+        <div class="project-item">
+          <strong>New Project Inquiry</strong>
+          <p>Hello! I'm interested in collaborating...</p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="window"
+      id="window-Music"
+      style="width: 360px; height: 350px; top: 110px; left: 180px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>📷</span><span>Music</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('Music')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <h3>📸 @alicja.creative</h3>
+        <p>Creative Designer & Digital Artist</p>
+        <p>🎨 UI/UX Design | 💻 Web Development | 📚 Illustration</p>
+      </div>
+    </div>
+
+    <div
+      class="window"
+      id="window-Resume"
+      style="width: 400px; height: 320px; top: 70px; left: 120px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>🎯</span><span>Resume</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('Resume')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <h3>Resume Platform</h3>
+        <p>Educational platform development and user experience design.</p>
+      </div>
+    </div>
+
+    <div
+      class="window"
+      id="window-solitaire"
+      style="width: 350px; height: 300px; top: 90px; left: 220px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>🃏</span><span>Solitaire</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('solitaire')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <h3>Classic Solitaire</h3>
+        <p>Coming soon... 🃏♠️♥️♦️♣️</p>
+      </div>
+    </div>
+
+    <div
+      class="window"
+      id="window-paint"
+      style="width: 400px; height: 350px; top: 80px; left: 140px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>🎨</span><span>Paint</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('paint')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <h3>Paint Application</h3>
+        <p>Drawing tools coming soon... 🖌️🎨</p>
+      </div>
+    </div>
+
+    <div
+      class="window"
+      id="window-chat"
+      style="width: 350px; height: 280px; top: 110px; left: 190px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>💬</span><span>Chat</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('chat')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <h3>Chat Room</h3>
+        <p>No new messages 💬</p>
+      </div>
+    </div>
+
+    <div
+      class="window"
+      id="window-guest"
+      style="width: 300px; height: 240px; top: 150px; left: 160px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>👤</span><span>Guest</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('guest')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <h3>Guest Access</h3>
+        <p>Limited features available for guest users</p>
+      </div>
+    </div>
+
+    <div
+      class="window"
+      id="window-radio"
+      style="width: 350px; height: 260px; top: 100px; left: 210px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>📻</span><span>Radio</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('radio')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <h3>Internet Radio 📻</h3>
+        <p>Choose your favorite station...</p>
+      </div>
+    </div>
+
+    <div
+      class="window"
+      id="window-awards"
+      style="width: 380px; height: 300px; top: 90px; left: 130px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>⭐</span><span>Awards</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('awards')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <h3>Achievements ⭐</h3>
+        <p>Your accomplishments and awards...</p>
+      </div>
+    </div>
+
+    <div
+      class="window"
+      id="window-recycling"
+      style="width: 320px; height: 250px; top: 120px; left: 180px"
+    >
+      <div class="window-header">
+        <div class="window-title"><span>♻️</span><span>Recycling</span></div>
+        <div class="window-controls">
+          <div class="window-button" onclick="closeWindow('recycling')">×</div>
+        </div>
+      </div>
+      <div class="window-content">
+        <h3>Recycle Bin ♻️</h3>
+        <p>Deleted items: 0</p>
+        <p>The recycle bin is empty.</p>
+      </div>
+    </div>
+
+    <!-- 작업표시줄 -->
+    <div class="taskbar">
+      <button class="start-button" onclick="toggleStartMenu()">
+        <div class="start-icon"></div>
+        Start
+      </button>
+
+      <div class="taskbar-right">
+        <div class="system-tray">
+          <div class="tray-icon"></div>
+          <div class="tray-icon"></div>
+        </div>
+        <div class="clock" id="clock">1:06:04</div>
+      </div>
+    </div>
+
+    <!-- 와이어프레임 주석 -->
+    <!-- <div class="wireframe-note note-1">
+      <strong>데스크톱 아이콘 영역</strong><br />
+      • 개인 프로필, 프로젝트, SNS 링크<br />
+      • 2열 그리드 레이아웃<br />
+      • 호버/선택 상태 표시
+    </div>
+
+    <div class="wireframe-note note-2">
+      <strong>작업표시줄 (Taskbar)</strong><br />
+      • Start 버튼 (메뉴 토글)<br />
+      • 시스템 트레이 아이콘들<br />
+      • 현재 시간 표시
+    </div>
+
+    <div class="wireframe-note note-3">
+      <strong>메인 데스크톱 영역</strong><br />
+      • 그라데이션 배경<br />
+      • 클릭 가능한 빈 공간<br />
+      • 컨텍스트 메뉴 지원 예정
+    </div> -->
+
+    <script>
+      // 드래그 관련 변수들
+      let isDragging = false;
+      let currentWindow = null;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      // 모든 윈도우 헤더에 이벤트 리스너 추가
+      document.addEventListener("DOMContentLoaded", function () {
+        const windowHeaders = document.querySelectorAll(".window-header");
+
+        windowHeaders.forEach((header) => {
+          header.addEventListener("mousedown", startDrag);
+        });
+
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", stopDrag);
+      });
+
+      function startDrag(e) {
+        isDragging = true;
+        currentWindow = e.target.closest(".window");
+
+        const rect = currentWindow.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        currentWindow.style.zIndex = 1000;
+        e.preventDefault();
+      }
+
+      function drag(e) {
+        if (!isDragging || !currentWindow) return;
+
+        currentWindow.style.left = e.clientX - offsetX + "px";
+        currentWindow.style.top = e.clientY - offsetY + "px";
+      }
+
+      function stopDrag() {
+        isDragging = false;
+        currentWindow = null;
+      }
+      // 시계 업데이트
+      function updateClock() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString("ko-KR", {
+          hour12: false,
+          hour: "numeric",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+        document.getElementById("clock").textContent = timeString;
+      }
+
+      // 윈도우 열기
+      function openWindow(windowName) {
+        console.log("Opening window:", windowName); // 디버깅용
+        const windowElement = document.getElementById("window-" + windowName);
+        if (windowElement) {
+          windowElement.classList.add("active");
+          windowElement.style.zIndex = 100 + Math.floor(Math.random() * 100);
+          console.log("Window opened successfully"); // 디버깅용
+        } else {
+          console.log("Window not found:", "window-" + windowName); // 디버깅용
+        }
+      }
+
+      // 윈도우 열기
+      function openWindow(windowName) {
+        console.log("Opening window:", windowName);
+        const windowElement = document.getElementById("window-" + windowName);
+        if (windowElement) {
+          windowElement.classList.add("active");
+          windowElement.style.zIndex = 100 + Math.floor(Math.random() * 100);
+
+          // music 창이 열릴 때만 비디오 재생
+          if (windowName === "music") {
+            const video = windowElement.querySelector("video");
+            if (video) {
+              video.play();
+            }
+          }
+
+          console.log("Window opened successfully");
+        } else {
+          console.log("Window not found:", "window-" + windowName);
+        }
+      }
+
+      // 윈도우 닫기
+      function closeWindow(windowName) {
+        const windowElement = document.getElementById("window-" + windowName);
+        if (windowElement) {
+          windowElement.classList.remove("active");
+        }
+      }
+
+      function toggleStartMenu() {
+        alert("Start 메뉴 기능 - 실제 구현시 드롭다운 메뉴가 나타납니다");
+      }
+
+      // 초기화
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Page loaded"); // 디버깅용
+
+        // 시계 시작
+        updateClock();
+        setInterval(updateClock, 1000);
+      });
+    </script>
+  </body>
+</html>
