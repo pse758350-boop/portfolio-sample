@@ -170,8 +170,8 @@
         left: 200px;
       }
       .window-music {
-        width: 400px;
-        height: 500px;
+        width: 700px;
+        height: 800px;
         top: 130px;
         left: 170px;
       }
@@ -387,7 +387,7 @@
       </div>
       <div class="desktop-icon" onclick="openWindow('music')">
         <div class="icon-image">
-          <img src="Untitled-4.png" alt="Music" />
+          <img src="Untitled-5.png" alt="Music" />
         </div>
         <div class="icon-label">Music</div>
       </div>
@@ -546,7 +546,7 @@
     <div
       class="window"
       id="window-music"
-      style="width: 350px; height: 300px; top: 130px; left: 170px"
+      style="width: 450px; height: 430px; top: 130px; left: 170px"
     >
       <div class="window-header">
         <div class="window-title"><span>🎵</span><span>Music Player</span></div>
@@ -564,8 +564,8 @@
         </video>
         <h3>🎵 Now Playing</h3>
         <div class="project-item" style="text-align: center">
-          <h4>Lo-Fi Coding Beats</h4>
-          <p>Perfect background music for creative work</p>
+          <h4 style="font-size: 15px">Avril Lavigne - Complicated</h4>
+          <!-- <p style="font-size: 11px">Complicated</p> -->
         </div>
       </div>
     </div>
@@ -908,6 +908,29 @@
         // 시계 시작
         updateClock();
         setInterval(updateClock, 1000);
+      });
+      // 윈도우 닫기
+      function closeWindow(windowName) {
+        const windowElement = document.getElementById("window-" + windowName);
+        if (windowElement) {
+          windowElement.classList.remove("active");
+
+          // 영상이 있는 경우 재생 중지
+          const video = windowElement.querySelector("video");
+          if (video) {
+            video.pause(); // 재생 중지
+            video.currentTime = 0; // 처음으로 되돌리기
+          }
+        }
+      }
+      // 페이지 로드 시 모든 뮤직 비디오 정지
+      document.addEventListener("DOMContentLoaded", function () {
+        const musicWindow = document.getElementById("window-music");
+        const video = musicWindow.querySelector("video");
+        if (video) {
+          video.pause(); // 처음엔 재생 안함
+          video.currentTime = 0; // 시작 위치 초기화
+        }
       });
     </script>
   </body>
