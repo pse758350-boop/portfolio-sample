@@ -46,7 +46,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 70px;
+        width: 75px;
         padding: 5px;
         cursor: pointer;
         border-radius: 2px;
@@ -62,8 +62,8 @@
       }
 
       .icon-image {
-        width: 50px;
-        height: 50px;
+        width: 60px;
+        height: 60px;
         /* background: #db94d8; */
         /* border: 2px inset #c0c0c0; */
         margin-bottom: 2px;
@@ -163,7 +163,7 @@
         top: 80px;
         left: 200px;
       }
-      .window-margo {
+      .window-recyclebin {
         width: 380px;
         height: 500px;
         top: 60px;
@@ -338,40 +338,83 @@
         font-weight: bold;
         font-size: 12px;
       }
+      /* Start 메뉴 스타일 */
+      .start-menu {
+        position: absolute;
+        bottom: 35px;
+        left: 0;
+        width: 200px;
+        background: #c0c0c0;
+        border: 2px outset #c0c0c0;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        display: none;
+        z-index: 2000;
+      }
+
+      .start-menu.active {
+        display: block;
+      }
+
+      .start-menu-header {
+        background: linear-gradient(90deg, #e386ff 0%, #872ba3 100%);
+        color: white;
+        padding: 8px;
+        font-size: 12px;
+        font-weight: bold;
+        border-bottom: 1px solid #808080;
+      }
+
+      .start-menu-items {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .start-menu-item {
+        display: flex;
+        align-items: center;
+        padding: 4px 8px;
+        cursor: pointer;
+        font-size: 11px;
+        border-bottom: 1px solid #e0e0e0;
+        transition: background-color 0.1s;
+      }
+
+      .start-menu-item:hover {
+        background-color: #0000ff;
+        color: white;
+      }
+
+      .start-menu-item img {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+      }
+
+      .start-menu-item .menu-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+      }
     </style>
   </head>
   <body>
     <!-- 데스크톱 아이콘들 -->
     <div class="desktop-icons">
-      <div class="desktop-icon" onclick="openWindow('Recycle Bin')">
-        <div class="icon-image">
-          <img src="Untitled-1.png" alt="Recycle Bin" />
-        </div>
-        <div class="icon-label">Recycle Bin</div>
-      </div>
-      <div class="desktop-icon" onclick="openWindow('Contact')">
-        <div class="icon-image">
-          <img src="Untitled-2.png" alt="Contact" />
-        </div>
-        <div class="icon-label">Contact</div>
-      </div>
       <div class="desktop-icon" onclick="openWindow('Profile')">
         <div class="icon-image">
           <img src="Untitled-3.png" alt="Profile" />
         </div>
         <div class="icon-label">Profile</div>
       </div>
-      <div class="desktop-icon" onclick="openWindow('email')">
+      <div class="desktop-icon" onclick="openWindow('Project')">
         <div class="icon-image">
-          <img src="Untitled-4.png" alt="E-mail" />
+          <img src="Untitled-4.png" alt="Project" />
         </div>
-        <div class="icon-label">E-mail</div>
-      </div>
-      <div class="desktop-icon" onclick="openWindow('Music')">
-        <div class="icon-image">
-          <img src="Untitled-5.png" alt="Music" />
-        </div>
-        <div class="icon-label">Music</div>
+        <div class="icon-label">Project</div>
       </div>
       <div class="desktop-icon" onclick="openWindow('Resume')">
         <div class="icon-image">
@@ -379,17 +422,29 @@
         </div>
         <div class="icon-label">Resume</div>
       </div>
-      <div class="desktop-icon" onclick="openWindow('margo')">
+      <div class="desktop-icon" onclick="openWindow('Process')">
         <div class="icon-image">
-          <img src="Untitled-4.png" alt="Margo" />
+          <img src="Process.png" alt="Process" />
         </div>
-        <div class="icon-label">Margo</div>
+        <div class="icon-label">Process</div>
       </div>
       <div class="desktop-icon" onclick="openWindow('music')">
         <div class="icon-image">
           <img src="Untitled-5.png" alt="Music" />
         </div>
         <div class="icon-label">Music</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('Contact')">
+        <div class="icon-image">
+          <img src="Untitled-2.png" alt="Contact" />
+        </div>
+        <div class="icon-label">Contact</div>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('recyclebin')">
+        <div class="icon-image">
+          <img src="Untitled-1.png" alt="Recycle Bin" />
+        </div>
+        <div class="icon-label">Recycle Bin</div>
       </div>
       <div class="desktop-icon" onclick="openWindow('solitaire')">
         <div class="icon-image">
@@ -436,16 +491,18 @@
     </div>
     <!-- 윈도우 창들 -->
     <!-- Alicja 프로필 창 -->
-    <div class="window window-Recycle Bin" id="window-Recycle Bin">
+    <div
+      class="window window-Profile"
+      id="window-Profile"
+      style="width: 350px; height: 280px; top: 100px; left: 100px"
+    >
       <div class="window-header">
         <div class="window-title">
           <span>👤</span>
           <span>Alicja - Profile</span>
         </div>
         <div class="window-controls">
-          <div class="window-button" onclick="closeWindow('Recycle Bin')">
-            ×
-          </div>
+          <div class="window-button" onclick="closeWindow('Profile')">×</div>
         </div>
       </div>
       <div class="window-content">
@@ -470,14 +527,18 @@
     </div>
 
     <!-- Projects 창 -->
-    <div class="window window-Contact" id="window-Contact">
+    <div
+      class="window window-Project"
+      id="window-Project"
+      style="width: 400px; height: 300px; top: 80px; left: 200px"
+    >
       <div class="window-header">
         <div class="window-title">
           <span>📁</span>
-          <span>Contact</span>
+          <span>Project</span>
         </div>
         <div class="window-controls">
-          <div class="window-button" onclick="closeWindow('Contact')">×</div>
+          <div class="window-button" onclick="closeWindow('Project')">×</div>
         </div>
       </div>
       <div class="window-content">
@@ -498,14 +559,14 @@
     </div>
 
     <!-- Margo Coloring Books 창 -->
-    <div class="window window-margo" id="window-margo">
+    <div class="window window-recyclebin" id="window-recyclebin">
       <div class="window-header">
         <div class="window-title">
           <span>🥭</span>
           <span>Margo Bloom Coloring Books</span>
         </div>
         <div class="window-controls">
-          <div class="window-button" onclick="closeWindow('margo')">×</div>
+          <div class="window-button" onclick="closeWindow('recyclebin')">×</div>
         </div>
       </div>
       <div class="window-content">
@@ -572,13 +633,13 @@
 
     <div
       class="window"
-      id="window-Profile"
+      id="window-Resume"
       style="width: 350px; height: 250px; top: 120px; left: 150px"
     >
       <div class="window-header">
-        <div class="window-title"><span>💼</span><span>Profile</span></div>
+        <div class="window-title"><span>💼</span><span>Resume</span></div>
         <div class="window-controls">
-          <div class="window-button" onclick="closeWindow('Profile')">×</div>
+          <div class="window-button" onclick="closeWindow('Resume')">×</div>
         </div>
       </div>
       <div class="window-content">
@@ -589,13 +650,13 @@
 
     <div
       class="window"
-      id="window-email"
+      id="window-Process"
       style="width: 400px; height: 300px; top: 90px; left: 250px"
     >
       <div class="window-header">
-        <div class="window-title"><span>📧</span><span>E-mail</span></div>
+        <div class="window-title"><span>📧</span><span>Process</span></div>
         <div class="window-controls">
-          <div class="window-button" onclick="closeWindow('email')">×</div>
+          <div class="window-button" onclick="closeWindow('Process')">×</div>
         </div>
       </div>
       <div class="window-content">
@@ -609,31 +670,13 @@
 
     <div
       class="window"
-      id="window-Music"
-      style="width: 360px; height: 350px; top: 110px; left: 180px"
-    >
-      <div class="window-header">
-        <div class="window-title"><span>📷</span><span>Music</span></div>
-        <div class="window-controls">
-          <div class="window-button" onclick="closeWindow('Music')">×</div>
-        </div>
-      </div>
-      <div class="window-content">
-        <h3>📸 @alicja.creative</h3>
-        <p>Creative Designer & Digital Artist</p>
-        <p>🎨 UI/UX Design | 💻 Web Development | 📚 Illustration</p>
-      </div>
-    </div>
-
-    <div
-      class="window"
-      id="window-Resume"
+      id="window-Contact"
       style="width: 400px; height: 320px; top: 70px; left: 120px"
     >
       <div class="window-header">
-        <div class="window-title"><span>🎯</span><span>Resume</span></div>
+        <div class="window-title"><span>🎯</span><span>Contact</span></div>
         <div class="window-controls">
-          <div class="window-button" onclick="closeWindow('Resume')">×</div>
+          <div class="window-button" onclick="closeWindow('Contact')">×</div>
         </div>
       </div>
       <div class="window-content">
@@ -761,6 +804,207 @@
         <p>The recycle bin is empty.</p>
       </div>
     </div>
+    <!-- HTML 추가 (작업표시줄 바로 위에 추가) -->
+    <div class="start-menu" id="start-menu">
+      <div class="start-menu-header">Visitor #40170</div>
+      <div class="start-menu-items">
+        <div
+          class="start-menu-item"
+          onclick="openWindow('Profile'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-3.png"
+              alt="Profile"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Profile</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('Project'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-4.png"
+              alt="Project"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Project</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('Resume'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-6.png"
+              alt="Resume"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Resume</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('Process'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Process.png"
+              alt="Process"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Process</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('music'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-5.png"
+              alt="Music"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Music</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('Resume'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-2.png"
+              alt="Contact"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Contact</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('recyclebin'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-1.png"
+              alt="Recycle Bin"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Recycle Bin</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('music'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-5.png"
+              alt="Music"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Music</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('solitaire'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-4.png"
+              alt="Solitaire"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Solitaire</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('paint'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-4.png"
+              alt="Paint"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Paint</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('chat'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-3.png"
+              alt="Chat"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Chat</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('guest'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-4.png"
+              alt="Guest"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Guest</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('radio'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-4.png"
+              alt="Radio"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Radio</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('awards'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-4.png"
+              alt="Awards"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Awards</span>
+        </div>
+        <div
+          class="start-menu-item"
+          onclick="openWindow('recycling'); closeStartMenu();"
+        >
+          <div class="menu-icon">
+            <img
+              src="Untitled-4.png"
+              alt="Recycling"
+              style="width: 16px; height: 16px"
+            />
+          </div>
+          <span>Recycling</span>
+        </div>
+      </div>
+    </div>
 
     <!-- 작업표시줄 -->
     <div class="taskbar">
@@ -855,17 +1099,17 @@
       }
 
       // 윈도우 열기
-      function openWindow(windowName) {
-        console.log("Opening window:", windowName); // 디버깅용
-        const windowElement = document.getElementById("window-" + windowName);
-        if (windowElement) {
-          windowElement.classList.add("active");
-          windowElement.style.zIndex = 100 + Math.floor(Math.random() * 100);
-          console.log("Window opened successfully"); // 디버깅용
-        } else {
-          console.log("Window not found:", "window-" + windowName); // 디버깅용
-        }
-      }
+      // function openWindow(windowName) {
+      //   console.log("Opening window:", windowName); // 디버깅용
+      //   const windowElement = document.getElementById("window-" + windowName);
+      //   if (windowElement) {
+      //     windowElement.classList.add("active");
+      //     windowElement.style.zIndex = 100 + Math.floor(Math.random() * 100);
+      //     console.log("Window opened successfully"); // 디버깅용
+      //   } else {
+      //     console.log("Window not found:", "window-" + windowName); // 디버깅용
+      //   }
+      // }
 
       // 윈도우 열기
       function openWindow(windowName) {
@@ -873,7 +1117,7 @@
         const windowElement = document.getElementById("window-" + windowName);
         if (windowElement) {
           windowElement.classList.add("active");
-          windowElement.style.zIndex = 100 + Math.floor(Math.random() * 100);
+          // windowElement.style.zIndex = 100 + Math.floor(Math.random() * 100);
 
           // music 창이 열릴 때만 비디오 재생
           if (windowName === "music") {
@@ -898,8 +1142,24 @@
       }
 
       function toggleStartMenu() {
-        alert("Start 메뉴 기능 - 실제 구현시 드롭다운 메뉴가 나타납니다");
+        const startMenu = document.getElementById("start-menu");
+        startMenu.classList.toggle("active");
       }
+
+      function closeStartMenu() {
+        const startMenu = document.getElementById("start-menu");
+        startMenu.classList.remove("active");
+      }
+
+      // 메뉴 외부 클릭 시 닫기
+      document.addEventListener("click", function (e) {
+        const startMenu = document.getElementById("start-menu");
+        const startButton = document.querySelector(".start-button");
+
+        if (!startMenu.contains(e.target) && !startButton.contains(e.target)) {
+          startMenu.classList.remove("active");
+        }
+      });
 
       // 초기화
       document.addEventListener("DOMContentLoaded", function () {
