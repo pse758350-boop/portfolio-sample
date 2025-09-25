@@ -75,7 +75,8 @@
 
       .icon-label {
         color: white;
-        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+        text-shadow: 1px 1px 0 #3d3d3d, -1px 1px 0 #444444, 1px -1px 0 #4e4d4d,
+          -1px -1px 0 #575757, 2px 2px 4px rgba(75, 75, 75, 0.8);
         font-size: 14px;
         text-align: center;
         line-height: 12px;
@@ -83,11 +84,16 @@
         word-wrap: break-word;
       }
 
+      /* 다크모드 아이콘 */
+      body.dark-mode .desktop-icon img {
+        filter: brightness(0.9) contrast(0.95);
+      }
+
       /* 윈도우 창 스타일 */
       .window {
         position: absolute;
         background: #c0c0c0;
-        border: 2px outset #c0c0c0;
+        border: 2px outset #c2c2c2;
         min-width: 300px;
         min-height: 200px;
         z-index: 100;
@@ -100,7 +106,7 @@
       }
 
       .window-header {
-        background: linear-gradient(90deg, #e386ff 0%, #872ba3 100%);
+        background: linear-gradient(90deg, #d07bd3 0%, #b6399b 100%);
         color: white;
         padding: 2px;
         display: flex;
@@ -110,6 +116,12 @@
         height: 18px;
         font-size: 11px;
         font-weight: bold;
+      }
+
+      /* 다크모드 윈도우창 헤더
+ */
+      body.dark-mode .window-header {
+        background: linear-gradient(90deg, #8e75b6 0%, #6947a0 100%);
       }
 
       .window-title {
@@ -129,12 +141,13 @@
         height: 14px;
         background: #c0c0c0;
         border: 1px outset #c0c0c0;
-        font-size: 10px;
+        font-size: 15px;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: "MS Sans Serif", sans-serif;
+        color: #474747;
       }
 
       .window-button:active {
@@ -148,6 +161,14 @@
         overflow: auto;
         font-size: 11px;
         line-height: 1.4;
+      }
+
+      body.dark-mode .window-content {
+        background: #000000;
+        color: #ffffff;
+      }
+      body.dark-mode .desktop-icon img {
+        filter: brightness(0.9) contrast(0.95) hue-rotate(300deg) saturate(0.9);
       }
 
       /* 개별 윈도우 크기 */
@@ -183,8 +204,8 @@
         left: 0;
         right: 0;
         height: 35px;
-        background: #d792da;
-        border-top: 2px solid #ffffff;
+        background: #d07bd3;
+        border-top: 2px solid #cec7cc;
         display: flex;
         align-items: center;
         padding: 0 2px;
@@ -193,7 +214,7 @@
 
       .start-button {
         height: 26px;
-        background: #e5ade7;
+        background: #dba4dd;
         border: 2px outset #c0c0c0;
         padding: 0 15px;
         font-size: 11px;
@@ -211,7 +232,7 @@
       .start-icon {
         width: 16px;
         height: 16px;
-        background: #ff00ddc9;
+        background: #e100ffc9;
         border-radius: 2px;
       }
 
@@ -231,16 +252,46 @@
       .tray-icon {
         width: 16px;
         height: 16px;
-        background: #808080;
+        background: #dabfdb;
         border: 1px solid #404040;
       }
 
       .clock {
-        font-size: 11px;
+        font-size: 12px;
         color: #000;
         padding: 2px 5px;
         border: 1px inset #c0c0c0;
-        background: #c0c0c0;
+        background: #dabfdb;
+      }
+      /* 다크모드 작업표시줄 */
+
+      body.dark-mode .taskbar {
+        background: #8e75b6;
+        border-top: 2px solid #919191;
+      }
+
+      body.dark-mode .start-button {
+        background: #ba9ceb;
+        border: 2px outset #919191;
+      }
+
+      body.dark-mode .start-button:active {
+        border: 2px inset #555555;
+      }
+
+      body.dark-mode .start-icon {
+        background: #5c5c5c;
+      }
+
+      body.dark-mode .tray-icon {
+        background: #4a4a4a;
+        border: 1px solid #666;
+      }
+
+      body.dark-mode .clock {
+        background: #4a4a4a;
+        border: 1px inset #555;
+        color: #fff;
       }
 
       /* 와이어프레임 주석 */
@@ -299,7 +350,7 @@
           transparent,
           transparent 2px,
           rgba(0, 0, 0, 0.3) 2px,
-          rgba(0, 0, 0, 0.1) 3px
+          rgba(0, 0, 0, 0.15) 3px
         );
         pointer-events: none;
         z-index: 10000;
@@ -380,7 +431,7 @@
       }
 
       .start-menu-item:hover {
-        background-color: #0000ff;
+        background-color: #cf6ff5;
         color: white;
       }
 
@@ -398,6 +449,30 @@
         align-items: center;
         justify-content: center;
         font-size: 12px;
+      }
+      .dark-mode-toggle {
+        width: 26px;
+        height: 20px;
+        background: #dabfdb;
+        border: 1px outset #c0c0c0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        transition: background-color 0.2s;
+      }
+
+      .dark-mode-toggle:hover {
+        background: #c9aeca;
+      }
+
+      .dark-mode-toggle:active {
+        border: 1px inset #c0c0c0;
+      }
+      body.dark-mode {
+        background-image: url("darkbg.jpg"); /* 다크모드용 배경 이미지 파일명 */
+        /* background-color: #2a2a2a; */
       }
     </style>
   </head>
@@ -499,7 +574,7 @@
       <div class="window-header">
         <div class="window-title">
           <span>👤</span>
-          <span>Alicja - Profile</span>
+          <span>SIEUN - Profile</span>
         </div>
         <div class="window-controls">
           <div class="window-button" onclick="closeWindow('Profile')">×</div>
@@ -530,7 +605,7 @@
     <div
       class="window window-Project"
       id="window-Project"
-      style="width: 400px; height: 300px; top: 80px; left: 200px"
+      style="width: 600px; height: 300px; top: 80px; left: 200px"
     >
       <div class="window-header">
         <div class="window-title">
@@ -1014,6 +1089,13 @@
       </button>
 
       <div class="taskbar-right">
+        <div
+          class="dark-mode-toggle"
+          onclick="toggleDarkMode()"
+          title="Dark Mode"
+        >
+          <span id="darkModeIcon">🌙</span>
+        </div>
         <div class="system-tray">
           <div class="tray-icon"></div>
           <div class="tray-icon"></div>
@@ -1192,6 +1274,18 @@
           video.currentTime = 0; // 시작 위치 초기화
         }
       });
+      function toggleDarkMode() {
+        const body = document.body;
+        const icon = document.getElementById("darkModeIcon");
+
+        body.classList.toggle("dark-mode");
+
+        if (body.classList.contains("dark-mode")) {
+          icon.textContent = "☀️";
+        } else {
+          icon.textContent = "🌙";
+        }
+      }
     </script>
   </body>
 </html>
