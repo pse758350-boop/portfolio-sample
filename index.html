@@ -615,19 +615,21 @@
         </div>
       </div>
       <div class="window-content">
-        <div class="project-item">
-          <h4>🎨 Retro Desktop Interface</h4>
-          <p>
-            A nostalgic Windows 95-style desktop interface with modern
-            functionality.
-          </p>
-          <small>Technologies: HTML, CSS, JavaScript</small>
-        </div>
-        <div class="project-item">
-          <h4>📚 Margo Coloring Books</h4>
-          <p>Creative coloring book designs and digital illustrations.</p>
-          <small>Tools: Digital Art, Print Design</small>
-        </div>
+        <div class="project-explorer">
+
+  <!-- 카테고리 영역 -->
+  <div class="project-folders">
+    <div class="folder" onclick="openCategory('video')">📁 Video</div>
+    <div class="folder" onclick="openCategory('3d')">📁 3D</div>
+    <div class="folder" onclick="openCategory('design')">📁 Design</div>
+  </div>
+
+  <!-- 파일 리스트 영역 -->
+  <div class="project-files" id="project-files">
+    <p style="color: gray;">Select a folder...</p>
+  </div>
+
+</div>
       </div>
     </div>
 
