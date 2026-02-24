@@ -163,6 +163,41 @@
         line-height: 1.4;
       }
 
+      .project-explorer {
+  display: flex;
+  gap: 20px;
+}
+
+.project-folders {
+  width: 150px;
+  border-right: 1px solid #ccc;
+}
+
+.folder {
+  padding: 6px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.folder:hover {
+  background: #d07bd3;
+  color: white;
+}
+
+.project-files {
+  flex: 1;
+  padding-left: 10px;
+}
+
+.file-item {
+  padding: 4px;
+  cursor: pointer;
+}
+
+.file-item:hover {
+  background: #f0f0f0;
+}
+
       body.dark-mode .window-content {
         background: #000000;
         color: #ffffff;
@@ -1286,6 +1321,38 @@
           icon.textContent = "🌙";
         }
       }
+
+      function openCategory(category) {
+  const fileArea = document.getElementById("project-files");
+
+  let content = "";
+
+  if (category === "video") {
+    content = `
+      <div class="file-item">🎬 Short Film.mp4</div>
+      <div class="file-item">🎞 Motion Graphics Reel.mp4</div>
+      <div class="file-item">📺 YouTube Edit.mov</div>
+    `;
+  }
+
+  if (category === "3d") {
+    content = `
+      <div class="file-item">🧊 3D Character.blend</div>
+      <div class="file-item">🏠 Interior Render.png</div>
+      <div class="file-item">🌌 Sci-fi Scene.mp4</div>
+    `;
+  }
+
+  if (category === "design") {
+    content = `
+      <div class="file-item">🎨 Poster Design.psd</div>
+      <div class="file-item">🖼 Album Cover.png</div>
+      <div class="file-item">📱 Thumbnail.jpg</div>
+    `;
+  }
+
+  fileArea.innerHTML = content;
+}
     </script>
   </body>
 </html>
